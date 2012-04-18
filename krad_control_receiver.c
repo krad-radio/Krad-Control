@@ -231,13 +231,13 @@ int krad_receiver_run (krad_receiver_t *krad_receiver) {
 		val = atof (krad_receiver->data + 3);
 		
 		if (krad_receiver->data[2] == 'S') {
-			//CPhidgetAdvancedServo_setPosition (servo_controller, servo, val);
+			CPhidgetAdvancedServo_setPosition (servo_controller, servo, val);
 		}
 		
 		if (krad_receiver->data[2] == 'T') {
 		
-		//	CPhidgetMotorControl_setVelocity (motoControl, 0, val);	
-		//	CPhidgetMotorControl_setVelocity (motoControl, 1, val);		
+			CPhidgetMotorControl_setVelocity (motoControl, 0, val);	
+			CPhidgetMotorControl_setVelocity (motoControl, 1, val);		
 		
 		}
 
