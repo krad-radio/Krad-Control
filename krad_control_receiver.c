@@ -228,7 +228,7 @@ int krad_receiver_run (krad_receiver_t *krad_receiver) {
 		
 		printf ("got packet! %s\n", krad_receiver->data);		
 		
-		val = atof (krad_receiver->data[3]);
+		val = atof (krad_receiver->data + 3);
 		
 		if (krad_receiver->data[2] == 'S') {
 			CPhidgetAdvancedServo_setPosition (servo_controller, servo, val);
