@@ -142,10 +142,9 @@ int krad_receiver_run (krad_receiver_t *krad_receiver) {
 	int endit;
 	float x, y;
 	float val;
+	CPhidgetMotorControlHandle motoControl = 0;
 	CPhidgetAdvancedServoHandle servo_controller;
 /*
-	//Declare a motor control handle
-	CPhidgetMotorControlHandle motoControl = 0;
 
 	//create the motor control object
 	CPhidgetMotorControl_create(&motoControl);
