@@ -30,7 +30,7 @@ typedef struct krad_receiver_St krad_receiver_t;
 struct krad_receiver_St {
 
 	int sd;
-	unsigned char *data;
+	char *data;
 	int port;
 	struct sockaddr_in local_address;
 	struct sockaddr_in remote_address;
