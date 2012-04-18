@@ -143,7 +143,7 @@ int krad_receiver_run (krad_receiver_t *krad_receiver) {
 	float x, y;
 	float val;
 	CPhidgetAdvancedServoHandle servo_controller;
-
+/*
 	//Declare a motor control handle
 	CPhidgetMotorControlHandle motoControl = 0;
 
@@ -216,7 +216,7 @@ int krad_receiver_run (krad_receiver_t *krad_receiver) {
 	CPhidgetAdvancedServo_setEngaged(servo_controller, servo, 1);
 	
 	CPhidgetMotorControl_setAcceleration (motoControl, 0, 10.00);	
-	
+	*/
 	while (1) {
 	
 		ret = recvfrom(krad_receiver->sd, krad_receiver->data, 2000, 0, (struct sockaddr *)&krad_receiver->remote_address, (socklen_t *)&rsize);
@@ -231,13 +231,13 @@ int krad_receiver_run (krad_receiver_t *krad_receiver) {
 		val = atof (krad_receiver->data + 3);
 		
 		if (krad_receiver->data[2] == 'S') {
-			CPhidgetAdvancedServo_setPosition (servo_controller, servo, val);
+			//CPhidgetAdvancedServo_setPosition (servo_controller, servo, val);
 		}
 		
 		if (krad_receiver->data[2] == 'T') {
 		
-			CPhidgetMotorControl_setVelocity (motoControl, 0, val);	
-			CPhidgetMotorControl_setVelocity (motoControl, 1, val);		
+		//	CPhidgetMotorControl_setVelocity (motoControl, 0, val);	
+		//	CPhidgetMotorControl_setVelocity (motoControl, 1, val);		
 		
 		}
 
