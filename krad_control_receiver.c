@@ -141,11 +141,28 @@ int krad_receiver_run (krad_receiver_t *krad_receiver) {
 	int num_axes, num_buttons, num_balls, num_hats;
 	int endit;
 	float x, y;
+	float val;
 	CPhidgetAdvancedServoHandle servo_controller;
+
+	//Declare a motor control handle
+	CPhidgetMotorControlHandle motoControl = 0;
+
+	//create the motor control object
+	CPhidgetMotorControl_create(&motoControl);
+	CPhidget_open((CPhidgetHandle)motoControl, -1);
+	printf("Waiting for MotorControl to be attached....");
+	if((result = CPhidget_waitForAttachment((CPhidgetHandle)motoControl, 10000)))
+	{
+		CPhidget_getErrorDescription(result, &err);
+		printf("Problem waiting for attachment: %s\n", err);
+		return 0;
+	}
+
 
 	servo_controller = 0;
 	endit = 0;
 	servo = 0;
+	val = 0;
 
 	min_pos = 76.0;
 	max_pos = 149.0;
@@ -198,6 +215,8 @@ int krad_receiver_run (krad_receiver_t *krad_receiver) {
 	CPhidgetAdvancedServo_setPosition (servo_controller, servo, curr_pos);
 	CPhidgetAdvancedServo_setEngaged(servo_controller, servo, 1);
 	
+	CPhidgetMotorControl_setAcceleration (motoControl, 0, 10.00);	
+	
 	while (1) {
 	
 		ret = recvfrom(krad_receiver->sd, krad_receiver->data, 2000, 0, (struct sockaddr *)&krad_receiver->remote_address, (socklen_t *)&rsize);
@@ -206,10 +225,21 @@ int krad_receiver_run (krad_receiver_t *krad_receiver) {
 			printf("failed recvin udp\n");
 			return 1;
 		}
-					
-		//CPhidgetAdvancedServo_setPosition (servo_controller, servo, curr_pos);
-	
-		printf ("got packet! %s\n", krad_receiver->data);
+		
+		printf ("got packet! %s\n", krad_receiver->data);		
+		
+		val = atof (krad_receiver->data[3]);
+		
+		if (krad_receiver->data[2] == 'S') {
+			CPhidgetAdvancedServo_setPosition (servo_controller, servo, val);
+		}
+		
+		if (krad_receiver->data[2] == 'T') {
+		
+			CPhidgetMotorControl_setVelocity (motoControl, 0, val);	
+			CPhidgetMotorControl_setVelocity (motoControl, 1, val);		
+		
+		}
 
 	}
 
@@ -217,9 +247,13 @@ int krad_receiver_run (krad_receiver_t *krad_receiver) {
 
 	CPhidgetAdvancedServo_setEngaged(servo_controller, servo, 0);
 	//since user input has been read, this is a signal to terminate the program so we will close the phidget and delete the object we created
-	printf("Closing...\n");
+	printf("Closing servo...\n");
 	CPhidget_close((CPhidgetHandle)servo_controller);
 	CPhidget_delete((CPhidgetHandle)servo_controller);
+
+	printf("Closing motor...\n");
+	CPhidget_close((CPhidgetHandle)motoControl);
+	CPhidget_delete((CPhidgetHandle)motoControl);
 
 	//all done, exit
 	return 0;

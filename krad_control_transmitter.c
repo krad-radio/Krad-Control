@@ -173,7 +173,7 @@ int krad_transmitter_run (krad_transmitter_t *krad_transmitter) {
 					
 					//CPhidgetAdvancedServo_setPosition (servo_controller, servo, curr_pos);
 					
-					cmdlen = sprintf(command, "%d,%f", time(NULL), curr_pos);
+					cmdlen = sprintf(command, "S%f", curr_pos) + 1;
 					krad_control_transmitter_sendto (krad_transmitter, (unsigned char *)command, cmdlen);
 					
 					printf ("sending %s\n", command);
@@ -181,7 +181,17 @@ int krad_transmitter_run (krad_transmitter_t *krad_transmitter) {
 				}
 				else if (evt.jaxis.axis == 1) {
 					y = evt.jaxis.value;
-					y/=1<<15;
+					
+					y = 0 - (((y / 32767.0) * 1.0) * 100.0);	
+					
+					cmdlen = sprintf(command, "T%f", y) + 1;;
+					krad_control_transmitter_sendto (krad_transmitter, (unsigned char *)command, cmdlen);
+					
+					printf ("sending %s\n", command);
+					
+					
+					
+					
 				}
 				break;
 		}
