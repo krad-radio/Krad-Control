@@ -144,7 +144,7 @@ int krad_receiver_run (krad_receiver_t *krad_receiver) {
 	float val;
 	CPhidgetMotorControlHandle motoControl = 0;
 	CPhidgetAdvancedServoHandle servo_controller;
-/*
+
 
 	//create the motor control object
 	CPhidgetMotorControl_create(&motoControl);
@@ -215,7 +215,7 @@ int krad_receiver_run (krad_receiver_t *krad_receiver) {
 	CPhidgetAdvancedServo_setEngaged(servo_controller, servo, 1);
 	
 	CPhidgetMotorControl_setAcceleration (motoControl, 0, 10.00);	
-	*/
+	
 	while (1) {
 	
 		ret = recvfrom(krad_receiver->sd, krad_receiver->data, 2000, 0, (struct sockaddr *)&krad_receiver->remote_address, (socklen_t *)&rsize);
