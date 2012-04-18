@@ -222,6 +222,7 @@ int krad_receiver_run (krad_receiver_t *krad_receiver) {
 		
 		if (ret == -1) {
 			printf("failed recvin udp\n");
+			printf( "errrr: %s\n", strerror( errno ) );
 			return 1;
 		}
 		
